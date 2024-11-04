@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "nodemon index",
     "fix": "standard --fix",
-    "test": "standard"
+    "test": "standard",
+    "uws": "npm install uNetworking/uWebSockets.js#v20.49.0",
+    "start": "pm2 start index.js --name api --max-memory-restart 128M"
   },
   "author": "f.riva@sotefin.ch",
   "license": "MIT",
