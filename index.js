@@ -46,9 +46,22 @@ const release = async (res, req, plc) => {
     res.aborted = true
   })
   const buffer = Buffer.allocUnsafe(2)
-  buffer.writeUInt16BE(1, 0)
+  buffer.writeUInt16BE(0, 0)
   const done = await plc.write(0x84, DBNR, 14, 2, 0x02, buffer)
   sendJson(res, { message: done ? 'opening' : 'error' })
+}
+
+const tag = async (res, req, plc) => {
+  log(req)
+  readJson(
+    res,
+    async json => {
+      const { id } = json
+      const buffer = Buffer.allocUnsafe(6)
+      buffer.writeUIntBE(id, 0, 6)
+      const done = await plc.write(0x84, DBNR, 18, 8, 0x02, buffer)
+      sendJson(res, { id, written: done })
+    })
 }
 
 const app = async () => {
@@ -58,6 +71,7 @@ const app = async () => {
       .get(process.env.PATHNAME + '/push', async (res, req) => push(res, req, plc))
       .get(process.env.PATHNAME + '/release', async (res, req) => release(res, req, plc))
       .post(process.env.PATHNAME + '/pin', async (res, req) => pin(res, req, plc))
+      .post(process.env.PATHNAME + '/tag', async (res, req) => tag(res, req, plc))
       .ws(process.env.PATHNAME, { open: ws => ws.subscribe(process.env.PATHNAME) })
       .any('/*', (res, req) => {
         log(req)
