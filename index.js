@@ -41,28 +41,6 @@ const pin = async (res, req, plc) => {
     })
 }
 
-// const push = async (res, req, plc) => {
-//   log(req)
-//   res.onAborted(() => {
-//     res.aborted = true
-//   })
-//   const buffer = Buffer.allocUnsafe(2)
-//   buffer.writeUInt16BE(1, 0)
-//   const done = await plc.write(0x84, DBNR, 14, 2, 0x02, buffer)
-//   sendJson(res, { message: done ? 'closing' : 'error' })
-// }
-
-// const release = async (res, req, plc) => {
-//   log(req)
-//   res.onAborted(() => {
-//     res.aborted = true
-//   })
-//   const buffer = Buffer.allocUnsafe(2)
-//   buffer.writeUInt16BE(0, 0)
-//   const done = await plc.write(0x84, DBNR, 14, 2, 0x02, buffer)
-//   sendJson(res, { message: done ? 'opening' : 'error' })
-// }
-
 const tag = async (res, req, plc) => {
   log(req)
   readJson(
@@ -81,8 +59,6 @@ const app = async () => {
     const app = uWS.App().listen(Number(process.env.PORT), token => logger.info(token))
     app
       .get(process.env.PATHNAME + '/close/:status', async (res, req) => close(res, req, plc))
-      // .get(process.env.PATHNAME + '/push', async (res, req) => push(res, req, plc))
-      // .get(process.env.PATHNAME + '/release', async (res, req) => release(res, req, plc))
       .post(process.env.PATHNAME + '/pin', async (res, req) => pin(res, req, plc))
       .post(process.env.PATHNAME + '/tag', async (res, req) => tag(res, req, plc))
       .ws(process.env.PATHNAME, { open: ws => ws.subscribe(process.env.PATHNAME) })
