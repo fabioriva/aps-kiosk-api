@@ -44,14 +44,14 @@ class PLC extends EventEmitter {
           const buffer = await this.read(0x84, DBNR, INIT, AMOUNT, 0x02)
           this.emit('pub', {
             channel: process.env.PATHNAME,
-            data: Buffer.from(JSON.stringify(this.data(buffer)))
+            data: JSON.stringify(this.data(buffer))
           })
         } else {
           this.online = this.client.Connect()
           this.online ? logger.info('Connected to PLC %s', IP) : logger.info('Connecting to PLC %s ...', IP)
           this.emit('pub', {
             channel: process.env.PATHNAME,
-            data: Buffer.from(JSON.stringify(this.data(Buffer.alloc(AMOUNT))))
+            data: JSON.stringify(this.data(Buffer.alloc(AMOUNT)))
           })
         }
       } catch (e) {
