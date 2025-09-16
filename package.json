@@ -6,20 +6,20 @@
     "dev": "nodemon index",
     "fix": "standard --fix",
     "test": "standard",
-    "uws": "npm install uNetworking/uWebSockets.js#v20.49.0",
+    "uws": "npm install uNetworking/uWebSockets.js#v20.52.0",
     "start": "pm2 start index.js --name api --max-memory-restart 128M"
   },
   "author": "f.riva@sotefin.ch",
   "license": "MIT",
   "description": "",
   "dependencies": {
-    "dotenv": "^16.4.5",
-    "node-snap7": "^1.0.7",
-    "pino": "^9.5.0",
-    "uWebSockets.js": "github:uNetworking/uWebSockets.js#v20.49.0"
+    "dotenv": "^17.0.0",
+    "node-snap7": "^1.0.9",
+    "pino": "^9.9.5",
+    "uWebSockets.js": "github:uNetworking/uWebSockets.js#v20.52.0"
   },
   "devDependencies": {
-    "nodemon": "^3.1.7",
+    "nodemon": "^3.1.10",
     "standard": "^17.1.2"
   },
   "standard": {
