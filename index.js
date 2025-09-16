@@ -64,7 +64,7 @@ const app = async () => {
       .ws(process.env.PATHNAME, { open: ws => ws.subscribe(process.env.PATHNAME) })
       .any('/*', (res, req) => {
         log(req)
-        res.end('Resource not found')
+        res.end('aps-kiosk-api - resource not found')
       })
     const plc = new Plc()
     plc.run()
