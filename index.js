@@ -57,7 +57,6 @@ const tag = async (res, req, plc) => {
       // data
       console.log('data:', typeof data, data.length, data)
       if (data[0] === 'F' && data[data.length - 1] === 'E') {
-        console.log(data[0], data[data.length - 1])
         const park = Number(data.slice(1, 3))
         const tag = Number(data.slice(3, 7))
         console.log(park, tag)
