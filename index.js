@@ -47,15 +47,30 @@ const tag = async (res, req, plc) => {
     res,
     async json => {
       const { uid, data } = json
-      console.log('uid:', typeof uid, uid.length, uid, 'data', data)
-      // const uidLen = uid.length
-      const buffer = Buffer.from(uid, 'hex')
-      console.log(buffer, buffer.length)
-      // const buffer = Buffer.allocUnsafe(uidLen)
-      // buffer.writeUIntBE(uid, 0, 6)
-      // const done = await plc.write(0x84, DBNR, 18, 8, 0x02, buffer)
-      const done = await plc.write(0x84, DBNR, 18, buffer.length, 0x02, buffer)
-      sendJson(res, { json, written: done })
+      let done
+      // UID
+      console.log('uid:', typeof uid, uid.length, uid)
+      const uidBuffer = Buffer.from(uid, 'hex')
+      console.log(uidBuffer, uidBuffer.length)
+      done = await plc.write(0x84, DBNR, 18, uidBuffer.length, 0x02, uidBuffer)
+      console.log('write uid', done)
+      // data
+      console.log('data:', typeof data, data.length, data)
+      if (data[0] === 'F' && data[data.length - 1] === 'E') {
+        console.log(data[0], data[data.length - 1])
+        const park = Number(data.slice(1, 3))
+        const tag = Number(data.slice(3, 7))
+        console.log(park, tag)
+        const dataBuffer = Buffer.alloc(4)
+        dataBuffer.writeInt16BE(park, 0)
+        dataBuffer.writeInt16BE(tag, 2)
+        console.log(dataBuffer, dataBuffer.length)
+        done = await plc.write(0x84, DBNR, 26, dataBuffer.length, 0x02, dataBuffer)
+        console.log('write data', done)
+      } else {
+        console.log('Tag not formatted')
+      }
+      sendJson(res, { uid, data })
     })
 }
 
