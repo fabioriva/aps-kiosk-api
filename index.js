@@ -46,11 +46,16 @@ const tag = async (res, req, plc) => {
   readJson(
     res,
     async json => {
-      const { id } = json
-      const buffer = Buffer.allocUnsafe(6)
-      buffer.writeUIntBE(id, 0, 6)
-      const done = await plc.write(0x84, DBNR, 18, 8, 0x02, buffer)
-      sendJson(res, { id, written: done })
+      const { uid, data } = json
+      console.log('uid:', typeof uid, uid.length, uid, 'data', data)
+      // const uidLen = uid.length
+      const buffer = Buffer.from(uid, 'hex')
+      console.log(buffer, buffer.length)
+      // const buffer = Buffer.allocUnsafe(uidLen)
+      // buffer.writeUIntBE(uid, 0, 6)
+      // const done = await plc.write(0x84, DBNR, 18, 8, 0x02, buffer)
+      const done = await plc.write(0x84, DBNR, 18, buffer.length, 0x02, buffer)
+      sendJson(res, { json, written: done })
     })
 }
 
