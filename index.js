@@ -61,7 +61,6 @@ const tag = async (res, req, plc) => {
       if (data[0] === 'F' && data[data.length - 1] === 'E') {
         const park = Number(data.slice(1, 3))
         const tag = Number(data.slice(3, 7))
-        console.log(park, tag)
         const dataBuffer = Buffer.alloc(4)
         dataBuffer.writeInt16BE(park, 0)
         dataBuffer.writeInt16BE(tag, 2)
