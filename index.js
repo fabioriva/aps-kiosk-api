@@ -1,10 +1,12 @@
-require('dotenv').config()
-const uWS = require('uWebSockets.js')
-const logger = require('pino')()
-const { readJson, sendJson } = require('./json')
-const Plc = require('./Plc')
+import 'dotenv/config.js'
+import * as uWS from 'uWebSockets.js'
+import pino from 'pino'
+import { readJson, sendJson } from './json.js'
+import Plc from './Plc.js'
 
 const DBNR = Number(process.env.DB_NR)
+
+const logger = pino()
 
 const log = (req) => {
   logger.info({

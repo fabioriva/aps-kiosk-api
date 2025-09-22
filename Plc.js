@@ -1,7 +1,9 @@
-const EventEmitter = require('events')
-const logger = require('pino')()
-const snap7 = require('node-snap7')
-const util = require('util')
+import { EventEmitter } from 'events'
+import pino from 'pino'
+import snap7 from 'node-snap7'
+import util from 'util'
+
+const logger = pino()
 
 const IP = process.env.IP
 const RACK = Number(process.env.RACK)
@@ -92,4 +94,4 @@ const writeArea = util.promisify(
   }
 )
 
-module.exports = PLC
+export default PLC

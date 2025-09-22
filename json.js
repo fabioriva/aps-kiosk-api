@@ -1,5 +1,5 @@
 /* Helper function for reading a posted JSON body */
-const readJson = (res, cb, err) => {
+export const readJson = (res, cb, err) => {
   let buffer
   /* Register data cb */
   res.onData((ab, isLast) => {
@@ -39,7 +39,7 @@ const readJson = (res, cb, err) => {
 }
 
 /* Helper function for sending JSON */
-const sendJson = (res, data) => {
+export const sendJson = (res, data) => {
   /* If we were aborted, you cannot respond */
   if (!res.aborted) {
     res.cork(() => {
@@ -48,8 +48,4 @@ const sendJson = (res, data) => {
         .end(JSON.stringify(data))
     })
   }
-}
-
-module.exports = {
-  readJson, sendJson
 }
