@@ -24,7 +24,7 @@ const close = async (res, req, plc) => {
   const status = req.getParameter(0)
   const buffer = Buffer.allocUnsafe(2)
   buffer.writeUInt16BE(parseInt(status), 0)
-  const done = await plc.write(0x84, DBNR, 14, 2, 0x02, buffer)
+  const done = await plc.write(0x84, DBNR, Number(process.env.OFFSET_CLOSE), 2, 0x02, buffer)
   sendJson(res, { message: done ? status : 'error' })
 }
 
@@ -38,7 +38,7 @@ const pin = async (res, req, plc) => {
       // console.log(json, regexp.test(json.pin))
       const buffer = Buffer.alloc(2)
       buffer.writeInt16BE(parseInt(pin, 16), 0) // string to hex
-      const done = await plc.write(0x84, DBNR, 16, 2, 0x02, buffer)
+      const done = await plc.write(0x84, DBNR, Number(process.env.OFFSET_PIN), 2, 0x02, buffer)
       sendJson(res, { pin, written: done })
     })
 }
@@ -54,7 +54,7 @@ const tag = async (res, req, plc) => {
       console.log('uid:', typeof uid, uid.length, uid)
       const uidBuffer = Buffer.from(uid, 'hex')
       console.log(uidBuffer, uidBuffer.length)
-      done = await plc.write(0x84, DBNR, 18, uidBuffer.length, 0x02, uidBuffer)
+      done = await plc.write(0x84, DBNR, Number(process.env.OFFSET_UID), uidBuffer.length, 0x02, uidBuffer)
       console.log('write uid', done)
       // data
       console.log('data:', typeof data, data.length, data)
@@ -65,7 +65,7 @@ const tag = async (res, req, plc) => {
         dataBuffer.writeInt16BE(park, 0)
         dataBuffer.writeInt16BE(tag, 2)
         console.log(dataBuffer, dataBuffer.length)
-        done = await plc.write(0x84, DBNR, 26, dataBuffer.length, 0x02, dataBuffer)
+        done = await plc.write(0x84, DBNR, Number(process.env.OFFSET_DATA), dataBuffer.length, 0x02, dataBuffer)
         console.log('write data', done)
       } else {
         console.log('Tag not formatted')
