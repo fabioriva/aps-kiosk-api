@@ -20,7 +20,7 @@ class PLC extends EventEmitter {
   }
 
   data (buffer) {
-    console.log(buffer)
+    // console.log(buffer)
     return {
       comm: this.online,
       lang: buffer.readInt16BE(0),
