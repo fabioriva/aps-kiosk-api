@@ -20,7 +20,7 @@ class PLC extends EventEmitter {
   }
 
   data (buffer) {
-    // console.log(buffer)
+    console.log(buffer)
     return {
       comm: this.online,
       lang: buffer.readInt16BE(0),
@@ -28,7 +28,7 @@ class PLC extends EventEmitter {
       card: buffer.readInt16BE(4),
       closeMesg: buffer.readInt16BE(6),
       digitNr: buffer.readInt16BE(8),
-      errMesg: buffer.readInt16BE(10),
+      errorMesg: buffer.readInt16BE(10),
       successMesg: buffer.readInt16BE(12)
     }
   }
