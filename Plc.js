@@ -27,9 +27,8 @@ class PLC extends EventEmitter {
       page: buffer.readInt16BE(2),
       card: buffer.readInt16BE(4),
       closeMesg: buffer.readInt16BE(6),
-      digitNr: buffer.readInt16BE(8),
-      errorMesg: buffer.readInt16BE(10),
-      successMesg: buffer.readInt16BE(12)
+      errorMesg: buffer.readInt16BE(8),
+      successMesg: buffer.readInt16BE(10)
     }
   }
 
