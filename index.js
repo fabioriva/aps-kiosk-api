@@ -27,7 +27,7 @@ const close = async (res, req, plc) => {
   // const done = await plc.write(0x84, DBNR, Number(process.env.OFFSET_CLOSE), 2, 0x02, buffer)
   const buffer = Buffer.allocUnsafe(1)
   buffer.writeUInt8(parseInt(status), 0)
-  const start = Number(process.env.OFFSET_BITS) * 8 + 8
+  const start = Number(process.env.OFFSET_BITS) * 8 + 8 // PLC R.BIT[8]
   const done = await plc.write(0x84, DBNR, start, 1, 0x01, buffer)
   sendJson(res, { message: done ? status : 'error' })
 }
@@ -45,6 +45,19 @@ const key = async (res, req, plc) => {
   console.log('/api/key', typeof key, key, buffer)
   const done = await plc.write(0x84, DBNR, Number(process.env.OFFSET_KEY), 1, 0x02, buffer)
   sendJson(res, { message: done ? key : 'error' })
+}
+
+const motion = async (res, req, plc) => {
+  log(req)
+  res.onAborted(() => {
+    res.aborted = true
+  })
+  const status = req.getParameter(0)
+  const buffer = Buffer.allocUnsafe(1)
+  buffer.writeUInt8(parseInt(status), 0)
+  const start = Number(process.env.OFFSET_BITS) * 8 + 9 // PLC R.BIT[9]
+  const done = await plc.write(0x84, DBNR, start, 1, 0x01, buffer)
+  sendJson(res, { message: done ? status : 'error' })
 }
 
 const pin = async (res, req, plc) => {
@@ -99,6 +112,7 @@ const app = async () => {
     app
       .get(process.env.PATHNAME + '/close/:status', async (res, req) => close(res, req, plc))
       .get(process.env.PATHNAME + '/key/:status', async (res, req) => key(res, req, plc))
+      .get(process.env.PATHNAME + '/motion/:status', async (res, req) => motion(res, req, plc))
       .post(process.env.PATHNAME + '/pin', async (res, req) => pin(res, req, plc))
       .post(process.env.PATHNAME + '/tag', async (res, req) => tag(res, req, plc))
       .ws(process.env.PATHNAME, { open: ws => ws.subscribe(process.env.PATHNAME) })
