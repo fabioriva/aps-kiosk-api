@@ -11,6 +11,7 @@ const SLOT = Number(process.env.SLOT)
 const DBNR = Number(process.env.DB_NR)
 const INIT = Number(process.env.DB_START)
 const AMOUNT = Number(process.env.DB_AMOUNT)
+const OFFSET_BITS = Number(process.env.OFFSET_BITS)
 
 class PLC extends EventEmitter {
   constructor () {
@@ -42,7 +43,7 @@ class PLC extends EventEmitter {
     setInterval(async () => {
       try {
         if (this.online) {
-          await this.write(0x84, 37, 14 * 8 + 0, 1, 0x01, Buffer.from([1])) // watchdog (DB37.DBX14.0)
+          await this.write(0x84, DBNR, OFFSET_BITS * 8 + 0, 1, 0x01, Buffer.from([1])) // watchdog PLC R.BIT[0]
           const buffer = await this.read(0x84, DBNR, INIT, AMOUNT, 0x02)
           this.emit('pub', {
             channel: process.env.PATHNAME,
