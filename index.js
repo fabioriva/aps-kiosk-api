@@ -16,18 +16,41 @@ const log = (req) => {
   })
 }
 
+const cancel = async (res, req, plc) => {
+  log(req)
+  res.onAborted(() => {
+    res.aborted = true
+  })
+  const status = req.getParameter(0)
+  const buffer = Buffer.allocUnsafe(1)
+  buffer.writeUInt8(parseInt(status), 0)
+  const start = Number(process.env.OFFSET_BITS) * 8 + 6 // PLC R.BIT[6]
+  const done = await plc.write(0x84, DBNR, start, 1, 0x01, buffer)
+  sendJson(res, { message: done ? status : 'error' })
+}
+
 const close = async (res, req, plc) => {
   log(req)
   res.onAborted(() => {
     res.aborted = true
   })
   const status = req.getParameter(0)
-  // const buffer = Buffer.allocUnsafe(2)
-  // buffer.writeUInt16BE(parseInt(status), 0)
-  // const done = await plc.write(0x84, DBNR, Number(process.env.OFFSET_CLOSE), 2, 0x02, buffer)
   const buffer = Buffer.allocUnsafe(1)
   buffer.writeUInt8(parseInt(status), 0)
   const start = Number(process.env.OFFSET_BITS) * 8 + 8 // PLC R.BIT[8]
+  const done = await plc.write(0x84, DBNR, start, 1, 0x01, buffer)
+  sendJson(res, { message: done ? status : 'error' })
+}
+
+const confirm = async (res, req, plc) => {
+  log(req)
+  res.onAborted(() => {
+    res.aborted = true
+  })
+  const status = req.getParameter(0)
+  const buffer = Buffer.allocUnsafe(1)
+  buffer.writeUInt8(parseInt(status), 0)
+  const start = Number(process.env.OFFSET_BITS) * 8 + 7 // PLC R.BIT[7]
   const done = await plc.write(0x84, DBNR, start, 1, 0x01, buffer)
   sendJson(res, { message: done ? status : 'error' })
 }
@@ -110,7 +133,9 @@ const app = async () => {
   try {
     const app = uWS.App().listen(Number(process.env.PORT), token => logger.info(token))
     app
+      .get(process.env.PATHNAME + '/cancel/:status', async (res, req) => cancel(res, req, plc))
       .get(process.env.PATHNAME + '/close/:status', async (res, req) => close(res, req, plc))
+      .get(process.env.PATHNAME + '/confirm/:status', async (res, req) => confirm(res, req, plc))
       .get(process.env.PATHNAME + '/key/:status', async (res, req) => key(res, req, plc))
       .get(process.env.PATHNAME + '/motion/:status', async (res, req) => motion(res, req, plc))
       .post(process.env.PATHNAME + '/pin', async (res, req) => pin(res, req, plc))
