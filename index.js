@@ -17,120 +17,157 @@ const log = (req) => {
 }
 
 const cancel = async (res, req, plc) => {
-  log(req)
-  res.onAborted(() => {
-    res.aborted = true
-  })
-  const status = req.getParameter(0)
-  const buffer = Buffer.allocUnsafe(1)
-  buffer.writeUInt8(parseInt(status), 0)
-  const start = Number(process.env.OFFSET_BITS) * 8 + 6 // PLC R.BIT[6]
-  const done = await plc.write(0x84, DBNR, start, 1, 0x01, buffer)
-  sendJson(res, { message: done ? status : 'error' })
+  try {
+    log(req)
+    res.onAborted(() => {
+      res.aborted = true
+    })
+    const status = req.getParameter(0)
+    const buffer = Buffer.allocUnsafe(1)
+    buffer.writeUInt8(parseInt(status), 0)
+    const start = Number(process.env.OFFSET_BITS) * 8 + 6 // PLC R.BIT[6]
+    const done = await plc.write(0x84, DBNR, start, 1, 0x01, buffer)
+    sendJson(res, { message: done ? status : 'error' })
+  } catch (e) {
+    logger.error(new Error(e))
+    sendJson(res, { message: 'error' })
+  }
 }
 
 const close = async (res, req, plc) => {
-  log(req)
-  res.onAborted(() => {
-    res.aborted = true
-  })
-  const status = req.getParameter(0)
-  const buffer = Buffer.allocUnsafe(1)
-  buffer.writeUInt8(parseInt(status), 0)
-  const start = Number(process.env.OFFSET_BITS) * 8 + 8 // PLC R.BIT[8]
-  const done = await plc.write(0x84, DBNR, start, 1, 0x01, buffer)
-  sendJson(res, { message: done ? status : 'error' })
+  try {
+    log(req)
+    res.onAborted(() => {
+      res.aborted = true
+    })
+    const status = req.getParameter(0)
+    const buffer = Buffer.allocUnsafe(1)
+    buffer.writeUInt8(parseInt(status), 0)
+    const start = Number(process.env.OFFSET_BITS) * 8 + 8 // PLC R.BIT[8]
+    const done = await plc.write(0x84, DBNR, start, 1, 0x01, buffer)
+    sendJson(res, { message: done ? status : 'error' })
+  } catch (e) {
+    logger.error(new Error(e))
+    sendJson(res, { message: 'error' })
+  }
 }
 
 const confirm = async (res, req, plc) => {
-  log(req)
-  res.onAborted(() => {
-    res.aborted = true
-  })
-  const status = req.getParameter(0)
-  const buffer = Buffer.allocUnsafe(1)
-  buffer.writeUInt8(parseInt(status), 0)
-  const start = Number(process.env.OFFSET_BITS) * 8 + 7 // PLC R.BIT[7]
-  const done = await plc.write(0x84, DBNR, start, 1, 0x01, buffer)
-  sendJson(res, { message: done ? status : 'error' })
+  try {
+    log(req)
+    res.onAborted(() => {
+      res.aborted = true
+    })
+    const status = req.getParameter(0)
+    const buffer = Buffer.allocUnsafe(1)
+    buffer.writeUInt8(parseInt(status), 0)
+    const start = Number(process.env.OFFSET_BITS) * 8 + 7 // PLC R.BIT[7]
+    const done = await plc.write(0x84, DBNR, start, 1, 0x01, buffer)
+    sendJson(res, { message: done ? status : 'error' })
+  } catch (e) {
+    logger.error(new Error(e))
+    sendJson(res, { message: 'error' })
+  }
 }
 
 const key = async (res, req, plc) => {
-  log(req)
-  res.onAborted(() => {
-    res.aborted = true
-  })
-  const key = req.getParameter(0)
-  console.log('/api/key', typeof key, key)
-  const buffer = Buffer.allocUnsafe(1)
-  buffer.writeUInt8(parseInt(key, 16), 0)
-  // // const buffer = Buffer.from(key)
-  console.log('/api/key', typeof key, key, buffer)
-  const done = await plc.write(0x84, DBNR, Number(process.env.OFFSET_KEY), 1, 0x02, buffer)
-  sendJson(res, { message: done ? key : 'error' })
+  try {
+    log(req)
+    res.onAborted(() => {
+      res.aborted = true
+    })
+    const key = req.getParameter(0)
+    console.log('/api/key', typeof key, key)
+    const buffer = Buffer.allocUnsafe(1)
+    buffer.writeUInt8(parseInt(key, 16), 0)
+    // // const buffer = Buffer.from(key)
+    console.log('/api/key', typeof key, key, buffer)
+    const done = await plc.write(0x84, DBNR, Number(process.env.OFFSET_KEY), 1, 0x02, buffer)
+    sendJson(res, { message: done ? key : 'error' })
+  } catch (e) {
+    logger.error(new Error(e))
+    sendJson(res, { message: 'error' })
+  }
 }
 
 const motion = async (res, req, plc) => {
-  log(req)
-  res.onAborted(() => {
-    res.aborted = true
-  })
-  const status = req.getParameter(0)
-  const buffer = Buffer.allocUnsafe(1)
-  buffer.writeUInt8(parseInt(status), 0)
-  const start = Number(process.env.OFFSET_BITS) * 8 + 9 // PLC R.BIT[9]
-  const done = await plc.write(0x84, DBNR, start, 1, 0x01, buffer)
-  sendJson(res, { message: done ? status : 'error' })
+  try {
+    log(req)
+    res.onAborted(() => {
+      res.aborted = true
+    })
+    const status = req.getParameter(0)
+    const buffer = Buffer.allocUnsafe(1)
+    buffer.writeUInt8(parseInt(status), 0)
+    const start = Number(process.env.OFFSET_BITS) * 8 + 9 // PLC R.BIT[9]
+    const done = await plc.write(0x84, DBNR, start, 1, 0x01, buffer)
+    sendJson(res, { message: done ? status : 'error' })
+  } catch (e) {
+    logger.error(new Error(e))
+    sendJson(res, { message: 'error' })
+  }
 }
 
 const pin = async (res, req, plc) => {
-  log(req)
-  readJson(
-    res,
-    async json => {
-      const { pin } = json
-      // const regexp = /^[a-fA-F0-9]{3}$/
-      // console.log(json, regexp.test(json.pin))
-      const buffer = Buffer.alloc(2)
-      buffer.writeInt16BE(parseInt(pin, 16), 0) // string to hex
-      const done = await plc.write(0x84, DBNR, Number(process.env.OFFSET_PIN), 2, 0x02, buffer)
-      sendJson(res, { pin, written: done })
-    })
+  try {
+    log(req)
+    readJson(
+      res,
+      async json => {
+        const { pin } = json
+        // const regexp = /^[a-fA-F0-9]{3}$/
+        // console.log(json, regexp.test(json.pin))
+        const buffer = Buffer.alloc(2)
+        buffer.writeInt16BE(parseInt(pin, 16), 0) // string to hex
+        const done = await plc.write(0x84, DBNR, Number(process.env.OFFSET_PIN), 2, 0x02, buffer)
+        sendJson(res, { pin, written: done })
+      })
+  } catch (e) {
+    logger.error(new Error(e))
+    sendJson(res, { message: 'error' })
+  }
 }
 
 const tag = async (res, req, plc) => {
-  log(req)
-  readJson(
-    res,
-    async json => {
-      const { uid, data } = json
-      let done
-      // UID
-      console.log('uid:', typeof uid, uid.length, uid)
-      const uidBuffer = Buffer.from(uid, 'hex')
-      console.log(uidBuffer, uidBuffer.length)
-      done = await plc.write(0x84, DBNR, Number(process.env.OFFSET_UID), uidBuffer.length, 0x02, uidBuffer)
-      console.log('write uid', done)
-      // data
-      console.log('data:', typeof data, data.length, data)
-      if (data[0] === 'F' && data[data.length - 1] === 'E') {
-        const park = Number(data.slice(1, 3))
-        const tag = Number(data.slice(3, 7))
-        const dataBuffer = Buffer.alloc(4)
-        dataBuffer.writeInt16BE(park, 0)
-        dataBuffer.writeInt16BE(tag, 2)
-        console.log(dataBuffer, dataBuffer.length)
-        done = await plc.write(0x84, DBNR, Number(process.env.OFFSET_DATA), dataBuffer.length, 0x02, dataBuffer)
-        console.log('write data', done)
-      } else {
-        console.log('Tag not formatted')
-      }
-      sendJson(res, { uid, data })
-    })
+  try {
+    log(req)
+    readJson(
+      res,
+      async json => {
+        const { uid, data } = json
+        let done
+        // UID
+        console.log('uid:', typeof uid, uid.length, uid)
+        const uidBuffer = Buffer.from(uid, 'hex')
+        console.log(uidBuffer, uidBuffer.length)
+        done = await plc.write(0x84, DBNR, Number(process.env.OFFSET_UID), uidBuffer.length, 0x02, uidBuffer)
+        console.log('write uid', done)
+        // data
+        console.log('data:', typeof data, data.length, data)
+        if (data[0] === 'F' && data[data.length - 1] === 'E') {
+          const park = Number(data.slice(1, 3))
+          const tag = Number(data.slice(3, 7))
+          const dataBuffer = Buffer.alloc(4)
+          dataBuffer.writeInt16BE(park, 0)
+          dataBuffer.writeInt16BE(tag, 2)
+          console.log(dataBuffer, dataBuffer.length)
+          done = await plc.write(0x84, DBNR, Number(process.env.OFFSET_DATA), dataBuffer.length, 0x02, dataBuffer)
+          console.log('write data', done)
+        } else {
+          console.log('Tag not formatted')
+        }
+        sendJson(res, { uid, data })
+      })
+  } catch (e) {
+    logger.error(new Error(e))
+    sendJson(res, { message: 'error' })
+  }
 }
 
 const app = async () => {
   try {
+    const plc = new Plc()
+    plc.run()
     const app = uWS.App().listen(Number(process.env.PORT), token => logger.info(token))
     app
       .get(process.env.PATHNAME + '/cancel/:status', async (res, req) => cancel(res, req, plc))
@@ -145,8 +182,8 @@ const app = async () => {
         log(req)
         res.end('aps-kiosk-api - resource not found')
       })
-    const plc = new Plc()
-    plc.run()
+    // const plc = new Plc()
+    // plc.run()
     plc.on('pub', ({ channel, data }) => app.publish(channel, data))
   } catch (e) {
     logger.error(new Error(e))
